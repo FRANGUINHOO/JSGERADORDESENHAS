@@ -9,7 +9,6 @@ botoes[1].onclick = aumentaTamanho;
 
 function diminuiTamanho(){
     if (tamanhoSenha > 1){
-       // tamanhoSenha = tamanhoSenha-1;
         tamanhoSenha--;
     }
     numeroSenha.textContent = tamanhoSenha;
@@ -17,7 +16,6 @@ function diminuiTamanho(){
 }
 function aumentaTamanho(){
     if (tamanhoSenha < 20){
-       // tamanhoSenha = tamanhoSenha+1;
        tamanhoSenha++;
     }
     numeroSenha.textContent = tamanhoSenha;
@@ -27,10 +25,9 @@ function aumentaTamanho(){
 const campoSenha = document.querySelector('#campo-senha');
 const checkbox = document.querySelectorAll('.checkbox');
 
-for (i=0; i < checkbox.length;i++){
+for (let i=0; i < checkbox.length; i++){
     checkbox[i].onclick = geraSenha;
 }
-
 
 const letrasMaiusculas = 'ABCDEFGHIJKLMNOPQRSTUVXYWZ';
 const letrasMinusculas = 'abcdefghijklmnopqrstuvxywz';
@@ -53,7 +50,7 @@ function geraSenha(){
     if (checkbox[3].checked){
         alfabeto = alfabeto + simbolos;
     }
-    console.log(alfabeto);
+    
     let senha = '';
     for (let i = 0; i < tamanhoSenha;i++){
         let numeroAleatorio = Math.random()*alfabeto.length;
@@ -61,4 +58,35 @@ function geraSenha(){
         senha = senha + alfabeto[numeroAleatorio];
     }
     campoSenha.value = senha;
+    
+    // CHAMADA DA FUNÇÃO DA BARRA (Adicionado aqui!)
+    calculaForca();
+}
+
+// NOVA FUNÇÃO PARA A BARRA DE FORÇA
+function calculaForca() {
+    // 1. Seleciona a barra de força (ajuste a classe se for diferente no seu HTML)
+    const barraForca = document.querySelector('.barra'); 
+    
+    // Se a senha estiver vazia (nenhum checkbox marcado), a barra some
+    if (campoSenha.value === "" || campoSenha.value.includes("undefined")) {
+        barraForca.style.width = "0%";
+        barraForca.style.backgroundColor = "transparent";
+        return;
+    }
+
+    // 2. Lógica simples de força baseada no tamanho da senha
+    if (tamanhoSenha < 8) {
+        // FRACA: Menor que 8 caracteres
+        barraForca.style.width = "30%";
+        barraForca.style.backgroundColor = "#e74c3c"; // Vermelho
+    } else if (tamanhoSenha >= 8 && tamanhoSenha < 12) {
+        // MÉDIA: Entre 8 e 11 caracteres
+        barraForca.style.width = "60%";
+        barraForca.style.backgroundColor = "#f1c40f"; // Amarelo/Laranja
+    } else if (tamanhoSenha >= 12) {
+        // FORTE: 12 ou mais caracteres
+        barraForca.style.width = "100%";
+        barraForca.style.backgroundColor = "#2ecc71"; // Verde
+    }
 }
